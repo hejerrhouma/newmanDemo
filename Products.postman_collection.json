@@ -1,0 +1,400 @@
+{
+	"info": {
+		"_postman_id": "0c723a68-ee79-4973-8841-7b3035c399f8",
+		"name": "Products",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "22113060"
+	},
+	"item": [
+		{
+			"name": "Get all products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches \", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"iPhone 9\");\r",
+							"\r",
+							"    pm.test(\"Verify the value of stock to the first product\", function () {\r",
+							"        var jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData.products[0].stock).to.eql(94);\r",
+							"    });\r",
+							"});\r",
+							"pm.test(\"content-encoding is present\", function () {\r",
+							"    pm.response.to.have.header(\"content-encoding\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"url": "{{BaseURL}}{{endpoint}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Get a single product",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"url": "{{BaseURL}}{{endpoint}}/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Search products",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}{{endpoint}}/search?q=phone",
+					"host": [
+						"{{BaseURL}}{{endpoint}}"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "phone"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Limit and skip products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"verify the limit is 10 \", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.limit).to.eql(10);\r",
+							"});\r",
+							"pm.test(\"verify the price of 3rd products is equal to 120\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.products[3].price).to.eql(120);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set(\"size\", \"5\");\r",
+							"pm.globals.set(\"limit\", \"10\");\r",
+							"console.clear();\r",
+							"console.info(pm.globals.get(\"size\"));\r",
+							"console.info(pm.globals.get(\"limit\"));\r",
+							"pm.globals.set(\"limit\", pm.globals.get(\"size\"));\r",
+							"console.info(pm.globals.get(\"limit\"));\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}{{endpoint}}?limit=10&skip=10&select=title,price",
+					"host": [
+						"{{BaseURL}}{{endpoint}}"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "skip",
+							"value": "10"
+						},
+						{
+							"key": "select",
+							"value": "title,price"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all products categories",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"url": "{{BaseURL}}{{endpoint}}/categories"
+			},
+			"response": []
+		},
+		{
+			"name": "Get products of a category",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"url": "{{BaseURL}}{{endpoint}}/category/smartphones"
+			},
+			"response": []
+		},
+		{
+			"name": "Add a new product",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "{{Content-Type}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"BMW Pencil\"\r\n    \r\n  }"
+				},
+				"url": "{{BaseURL}}{{endpoint}}/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Update a product",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"accept-encoding": true,
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "{{Content-Type}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"iPhone Galaxy +1\"\r\n  }"
+				},
+				"url": "{{BaseURL}}{{endpoint}}/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a product",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "{{Accept}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "{{Accept-Encoding}}",
+						"type": "text"
+					}
+				],
+				"url": "{{BaseURL}}{{endpoint}}/1"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"console.clear();",
+					"pm.globals.unset(\"Content-Type\"); //supprimer le contenu du content type",
+					"console.info(pm.globals.get(\"Content-Type\"));",
+					"pm.globals.set(\"Content-Type\", \"application/json\"); ",
+					"console.info(pm.globals.get(\"Content-Type\"));",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Response time is less than 800ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "endpoint",
+			"value": "/products"
+		}
+	]
+}
